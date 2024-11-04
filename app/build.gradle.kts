@@ -5,12 +5,11 @@ plugins {
 
 android {
     namespace = "com.daily.new_amime.for_my.daily_anime_app"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "com.daily.new_amime.for_my.daily_anime_app"
         minSdk = 27
-        targetSdk = 34
         versionCode = 1
         versionName = "1.0"
 
@@ -50,6 +49,10 @@ android {
 }
 
 dependencies {
+    // for app wiget
+    implementation( libs.androidx.glance.appwidget.v110)
+    implementation( libs.androidx.glance.material3)
+    implementation( libs.androidx.glance.material)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
