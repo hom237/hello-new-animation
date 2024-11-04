@@ -4,6 +4,5 @@ import androidx.glance.appwidget.GlanceAppWidget
 import androidx.glance.appwidget.GlanceAppWidgetReceiver
 
 class NewAnimeWidgetReceiver : GlanceAppWidgetReceiver() {
-    override val glanceAppWidget: GlanceAppWidget
-        get() = NewAnimeWidget("test")
+    override val glanceAppWidget: GlanceAppWidget = NewAnimeWidget()
 }

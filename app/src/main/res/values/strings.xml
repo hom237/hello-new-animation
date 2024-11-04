@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">daily_anime_app</string>
+    <string name="widget_description">오늘 신작 보기</string>
 </resources>
