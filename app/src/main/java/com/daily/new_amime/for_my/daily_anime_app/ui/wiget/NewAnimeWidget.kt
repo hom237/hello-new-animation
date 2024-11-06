@@ -37,8 +37,8 @@ class NewAnimeWidget(): GlanceAppWidget() {
         Column(
             modifier = GlanceModifier.fillMaxSize()
                 .background(GlanceTheme.colors.background),
-            verticalAlignment = Alignment.Top,
-            horizontalAlignment = Alignment.CenterHorizontally
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalAlignment = Alignment.Vertical.CenterVertically
         ) {
             Text(text = "count : ${cont.value}", modifier = GlanceModifier.padding(12.dp))
             Row(horizontalAlignment = Alignment.CenterHorizontally) {
