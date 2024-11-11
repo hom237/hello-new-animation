@@ -1,4 +1,4 @@
-package com.daily.new_amime.for_my.daily_anime_app.ui.wiget
+package com.daily.new_amime.for_my.main.ui.wiget
 
 import android.content.Context
 import androidx.compose.runtime.Composable
@@ -55,5 +55,4 @@ class NewAnimeWidget(): GlanceAppWidget() {
             }
         }
     }
-
 }

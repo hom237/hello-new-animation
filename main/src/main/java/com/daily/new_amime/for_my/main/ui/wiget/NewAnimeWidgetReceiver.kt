@@ -1,4 +1,4 @@
-package com.daily.new_amime.for_my.daily_anime_app.ui.wiget
+package com.daily.new_amime.for_my.main.ui.wiget
 
 import androidx.glance.appwidget.GlanceAppWidget
 import androidx.glance.appwidget.GlanceAppWidgetReceiver

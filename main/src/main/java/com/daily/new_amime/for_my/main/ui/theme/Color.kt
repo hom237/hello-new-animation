@@ -1,4 +1,4 @@
-package com.daily.new_amime.for_my.daily_anime_app.ui.theme
+package com.daily.new_amime.for_my.main.ui.theme
 
 import androidx.compose.ui.graphics.Color
 

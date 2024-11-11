@@ -1,0 +1,4 @@
+<resources>
+    <string name="title_activity_main">MainActivity</string>
+    <string name="widget_description">오늘 신작 보기</string>
+</resources>

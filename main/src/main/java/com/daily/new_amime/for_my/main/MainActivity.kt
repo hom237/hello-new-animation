@@ -1,4 +1,4 @@
-package com.daily.new_amime.for_my.daily_anime_app
+package com.daily.new_amime.for_my.main
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -11,12 +11,13 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import com.daily.new_amime.for_my.daily_anime_app.ui.theme.Daily_anime_appTheme
+import com.daily.new_amime.for_my.main.ui.theme.Daily_anime_appTheme
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
         setContent {
             Daily_anime_appTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
@@ -29,6 +30,7 @@ class MainActivity : ComponentActivity() {
         }
     }
 }
+
 
 @Composable
 fun Greeting(name: String, modifier: Modifier = Modifier) {
