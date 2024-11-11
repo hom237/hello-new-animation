@@ -23,20 +23,31 @@ android {
             )
         }
     }
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+    packaging {
+        resources {
+            excludes += "META-INF/gradle/incremental.annotation.processors"
+        }
     }
-    kotlinOptions {
-        jvmTarget = "1.8"
+    buildFeatures {
+    }
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
 }
 
 dependencies {
+    implementation(libs.gson)
+    implementation(libs.converter.gson)
+    implementation(libs.retrofit.core)
 
-    implementation(libs.androidx.core.ktx)
+    implementation(libs.hilt.compiler)
+    implementation(libs.hilt.android)
+
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
+
+    implementation(libs.androidx.core.ktx)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

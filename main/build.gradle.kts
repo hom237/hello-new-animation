@@ -1,21 +1,19 @@
 plugins {
-    alias(libs.plugins.android.application)
+    alias(libs.plugins.android.library)
     alias(libs.plugins.jetbrains.kotlin.android)
-    alias(libs.plugins.hilt)
+    id("com.google.dagger.hilt.android")
     id("com.google.devtools.ksp")
 }
 
 android {
-    namespace = "com.daily.new_amime.for_my.daily_anime_app"
+    namespace = "com.daily.new_amime.for_my.main"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.daily.new_amime.for_my.daily_anime_app"
         minSdk = 27
-        versionCode = 1
-        versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles("consumer-rules.pro")
         vectorDrawables {
             useSupportLibrary = true
         }
@@ -30,44 +28,35 @@ android {
             )
         }
     }
+    buildFeatures {
+        compose = true
+    }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
-    }
-    buildFeatures {
-        compose = true
     }
     composeOptions {
         kotlinCompilerExtensionVersion = "1.5.2"
     }
     packaging {
         resources {
-            excludes += "/META-INF/{AL2.0,LGPL2.1}"
+            excludes += "META-INF/gradle/incremental.annotation.processors"
         }
     }
-
 }
 
 dependencies {
 
-    implementation(project(":main"))
-    implementation(libs.gson)
-    implementation(libs.converter.gson)
-    implementation(libs.retrofit.core)
-
-    implementation(libs.hilt.android.gradle.plugin)
+    implementation(libs.hilt.android)
     implementation(libs.hilt.navigation.compose)
-    implementation(libs.coil.kt)
-    implementation(libs.androidx.glance.material3)
+    ksp(libs.hilt.compiler)
 
-    implementation(libs.androidx.appcompat)
-    implementation(libs.material)
-    // for app wiget
+    implementation(libs.coil.kt)
+
     implementation( libs.androidx.glance.appwidget.v110)
     implementation( libs.androidx.glance.material3)
     implementation( libs.androidx.glance.material)
-    implementation(libs.hilt.android)
-    ksp(libs.hilt.compiler)
+
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)

@@ -22,3 +22,4 @@ dependencyResolutionManagement {
 rootProject.name = "daily_anime_app"
 include(":app")
 include(":networking")
+include(":main")
