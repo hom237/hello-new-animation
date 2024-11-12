@@ -57,6 +57,11 @@ dependencies {
     implementation( libs.androidx.glance.material3)
     implementation( libs.androidx.glance.material)
 
+    //view model
+    implementation(libs.androidx.lifecycle.viewModelCompose)
+    implementation(libs.androidx.lifecycle.runtimeLifecycle)
+    implementation(libs.androidx.lifecycle.runtimeCompose)
+
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
