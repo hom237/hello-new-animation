@@ -1,7 +1,6 @@
 package com.very.fresh.di
 
 import com.daily.new_amime.for_my.networking.anime.AnimeApi
-import com.very.fresh.di.ignore.Url.URL
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
