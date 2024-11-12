@@ -46,6 +46,9 @@ android {
 }
 
 dependencies {
+    implementation(libs.retrofit.core)
+
+    implementation(project(":networking"))
 
     implementation(libs.hilt.android)
     implementation(libs.hilt.navigation.compose)

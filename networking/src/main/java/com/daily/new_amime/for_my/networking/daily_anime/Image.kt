@@ -1,4 +1,4 @@
-package com.daily.new_amime.for_my.network.dto.daily_anime
+package com.daily.new_amime.for_my.networking.daily_anime
 
 data class Image(
     val crop_ratio: String,

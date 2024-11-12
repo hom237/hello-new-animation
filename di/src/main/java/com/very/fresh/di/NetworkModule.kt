@@ -1,9 +1,7 @@
 package com.very.fresh.di
 
 import com.daily.new_amime.for_my.networking.anime.AnimeApi
-import com.very.fresh.di.ignore.Url
 import com.very.fresh.di.ignore.Url.URL
-import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -18,12 +16,12 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 class NetworkModule {
-    @Binds
+    @Provides
     @Singleton
     fun provideLoggingInterceptor(): HttpLoggingInterceptor =
         HttpLoggingInterceptor().apply { level = HttpLoggingInterceptor.Level.BODY }
 
-    @Binds
+    @Provides
     @Singleton
     fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit {
         return Retrofit.Builder()
@@ -37,7 +35,7 @@ class NetworkModule {
     @Singleton
     fun provideAnimeApi(retrofit: Retrofit): AnimeApi = retrofit.create(AnimeApi::class.java)
 
-    @Binds
+    @Provides
     @Singleton
     fun provideOkHttpClient(
         loggerInterceptor: HttpLoggingInterceptor,

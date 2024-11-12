@@ -15,5 +15,4 @@ class RepositoryModule {
     @Singleton
     fun provideAnimeRepository(animeRepositoryImpl: AnimeRepositoryImpl): AnimeRepository =
         animeRepositoryImpl
-
 }
