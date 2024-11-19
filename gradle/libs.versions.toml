@@ -25,7 +25,6 @@ hilt = "2.49"
 hiltNavigationCompose = "1.2.0"
 
 ioCoil = "2.7.0"
-material3Android = "1.3.1"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }

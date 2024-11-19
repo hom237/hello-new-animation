@@ -42,32 +42,37 @@ android {
     }
     packaging {
         resources {
-            excludes += "/META-INF/{AL2.0,LGPL2.1}"
+            excludes += "META-INF/gradle/incremental.annotation.processors"
         }
+    }
+
+    kotlinOptions {
+        jvmTarget = "17"
     }
 
 }
 
 dependencies {
-
     implementation(project(":main"))
+    implementation(project(":di"))
+
     implementation(libs.gson)
     implementation(libs.converter.gson)
     implementation(libs.retrofit.core)
 
-    implementation(libs.hilt.android.gradle.plugin)
-    implementation(libs.hilt.navigation.compose)
     implementation(libs.coil.kt)
     implementation(libs.androidx.glance.material3)
 
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
+
+    implementation(libs.hilt.android)
+    ksp(libs.hilt.compiler)
+
     // for app wiget
     implementation( libs.androidx.glance.appwidget.v110)
     implementation( libs.androidx.glance.material3)
     implementation( libs.androidx.glance.material)
-    implementation(libs.hilt.android)
-    ksp(libs.hilt.compiler)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)

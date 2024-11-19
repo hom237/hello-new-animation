@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.daily.new_amime.for_my.networking.anime.AnimeRepository
 import com.daily.new_amime.for_my.networking.daily_anime.DailyDto
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -13,9 +14,10 @@ import kotlinx.coroutines.launch
 import retrofit2.HttpException
 import javax.inject.Inject
 
+@HiltViewModel
 class AnimeViewModel @Inject constructor(
     private val animeRepository: AnimeRepository
-) : ViewModel() {
+) :  ViewModel() {
 
     private var _dailyAnimeUiState = MutableStateFlow<DailyAnimeUiState>(DailyAnimeUiState.Success(
         animes =  emptyList()))

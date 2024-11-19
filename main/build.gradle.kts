@@ -1,7 +1,7 @@
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.jetbrains.kotlin.android)
-    id("com.google.dagger.hilt.android")
+    alias(libs.plugins.hilt)
     id("com.google.devtools.ksp")
 }
 
@@ -43,6 +43,10 @@ android {
             excludes += "META-INF/gradle/incremental.annotation.processors"
         }
     }
+    kotlinOptions {
+        jvmTarget = "17"
+    }
+
 }
 
 dependencies {
