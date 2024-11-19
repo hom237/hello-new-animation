@@ -8,7 +8,7 @@ data class DailyDto(
     val distributed_air_time_sequence: Int,
     val distributed_air_times: List<String>,
     val genres: List<String>,
-    val highlight_video: HighlightVideo,
+    val highlight_video: HighlightVideo?,
     val id: Int,
     val images: List<Image>,
     val img: String,

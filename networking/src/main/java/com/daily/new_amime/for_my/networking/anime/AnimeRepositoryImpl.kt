@@ -9,6 +9,6 @@ class AnimeRepositoryImpl @Inject constructor(
     private val animeApi: AnimeApi
 ) : AnimeRepository {
     override suspend fun getAnimationDaily(): Flow<List<DailyDto>> = flow {
-        emit(animeApi.getAnimationDaily())
+        animeApi.getAnimationDaily()
     }
 }
