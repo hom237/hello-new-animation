@@ -13,6 +13,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -37,10 +38,12 @@ class NewAnimeWidgetReceiver : GlanceAppWidgetReceiver() {
         NewAnimeWidget(){
             GlobalScope.async(Dispatchers.Main) {
                 kotlin.runCatching {
-                    animeRepository.getAnimationDaily().first() // Flow의 첫 번째 결과만 가져오기
+                    animeRepository.getAnimationDaily()
                 }.getOrElse { e ->
                     Log.e("getDailyAnime", "Error fetching daily anime", e)
-                    emptyList()
+                    flow<List<DailyDto>> {
+                        emit(emptyList())
+                    }
                 }
             }.await()
         }

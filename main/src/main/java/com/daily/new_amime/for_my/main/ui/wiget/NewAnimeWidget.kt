@@ -38,6 +38,7 @@ import dagger.hilt.android.HiltAndroidApp
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -48,7 +49,7 @@ import java.net.URL
 import javax.inject.Inject
 
 
-class NewAnimeWidget(private val data :  suspend () -> List<DailyDto>)
+class NewAnimeWidget(private val data :  suspend () -> Flow<List<DailyDto>>)
     : GlanceAppWidget() {
 
     override suspend fun provideGlance(context: Context, id: GlanceId) {
