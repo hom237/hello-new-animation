@@ -51,6 +51,9 @@ android {
 
 dependencies {
     implementation(libs.retrofit.core)
+    implementation ("com.github.skydoves:landscapist-glide:2.3.2")
+    implementation (libs.compose)
+
 
     implementation(project(":networking"))
 
