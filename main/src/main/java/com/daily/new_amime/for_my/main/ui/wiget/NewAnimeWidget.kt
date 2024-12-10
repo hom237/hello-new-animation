@@ -1,61 +1,41 @@
 package com.daily.new_amime.for_my.main.ui.wiget
 
 import android.content.Context
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.util.Log
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.unit.dp
 import androidx.glance.Button
 import androidx.glance.GlanceId
 import androidx.glance.GlanceModifier
 import androidx.glance.GlanceTheme
-import androidx.glance.Image
-import androidx.glance.ImageProvider
 import androidx.glance.LocalContext
 import androidx.glance.appwidget.GlanceAppWidget
-import androidx.glance.appwidget.SizeMode
 import androidx.glance.appwidget.provideContent
 import androidx.glance.background
 import androidx.glance.layout.Alignment
 import androidx.glance.layout.Column
 import androidx.glance.layout.Row
 import androidx.glance.layout.fillMaxSize
-import androidx.glance.layout.fillMaxWidth
-import androidx.glance.layout.height
 import androidx.glance.layout.padding
 import androidx.glance.text.Text
-import androidx.lifecycle.viewModelScope
-import com.daily.new_amime.for_my.main.viewModel.DailyAnimeUiState
-import com.daily.new_amime.for_my.networking.anime.AnimeApi
-import com.daily.new_amime.for_my.networking.anime.AnimeRepository
+import coil.compose.AsyncImage
 import com.daily.new_amime.for_my.networking.daily_anime.DailyDto
-import dagger.hilt.android.AndroidEntryPoint
-import dagger.hilt.android.HiltAndroidApp
-import kotlinx.coroutines.DelicateCoroutinesApi
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.launch
-import retrofit2.HttpException
-import java.io.InputStream
-import java.net.HttpURLConnection
-import java.net.URL
-import javax.inject.Inject
+import kotlinx.coroutines.flow.firstOrNull
+import kotlinx.coroutines.runBlocking
 
 
-class NewAnimeWidget(private val data :  suspend () -> Flow<List<DailyDto>>)
-    : GlanceAppWidget() {
+class NewAnimeWidget(private val data: Flow<List<DailyDto>>) : GlanceAppWidget() {
+    var animeData: List<DailyDto>? = null
 
     override suspend fun provideGlance(context: Context, id: GlanceId) {
-        GlobalScope.launch() {
-            Log.d("test", "input data : ${data()}")
-        }
+        Log.d("test", "input data1 : ${animeData}")
+        getAnimeData()
+        Log.d("test", "input data2 : ${animeData}")
         provideContent {
 
             // create your AppWidget here
@@ -65,9 +45,17 @@ class NewAnimeWidget(private val data :  suspend () -> Flow<List<DailyDto>>)
         }
     }
 
+    private fun getAnimeData() {
+        runBlocking {
+            Log.d("test", "input data3 : ${animeData}")
+            Log.d("test", "input data4 : ${animeData}")
+        }
+    }
+
 
     @Composable
     private fun MyContent() {
+        val test by data.collectAsState(emptyList())
         Log.d("size", "widget size : $sizeMode")
         val cont = remember {
             mutableStateOf(0)
@@ -100,7 +88,10 @@ class NewAnimeWidget(private val data :  suspend () -> Flow<List<DailyDto>>)
 //                    }
 //                }
 //            }
-
+            AsyncImage(
+                model = test[0].img ?: "",
+                contentDescription = ""
+            )
             Text(text = "count : ${cont.value}", modifier = GlanceModifier.padding(12.dp))
             Row(horizontalAlignment = Alignment.CenterHorizontally) {
                 Button(

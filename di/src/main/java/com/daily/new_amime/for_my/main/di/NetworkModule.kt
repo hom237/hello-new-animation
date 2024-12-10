@@ -1,7 +1,9 @@
 package com.daily.new_amime.for_my.main.di
 
+import com.daily.new_amime.for_my.annotation.RetrofitModule
 import com.daily.new_amime.for_my.main.ignore.URL
 import com.daily.new_amime.for_my.networking.anime.AnimeApi
+import com.daily.new_amime.for_my.networking.image.ImageApi
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -23,6 +25,7 @@ class NetworkModule {
 
     @Provides
     @Singleton
+    @RetrofitModule.MainDomainRetrofit
     fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit {
         return Retrofit.Builder()
             .baseUrl(URL)
@@ -33,7 +36,26 @@ class NetworkModule {
 
     @Provides
     @Singleton
-    fun provideAnimeApi(retrofit: Retrofit): AnimeApi = retrofit.create(AnimeApi::class.java)
+    @RetrofitModule.SubDomainRetrofit
+    fun subProvideRetrofit(okHttpClient: OkHttpClient): Retrofit {
+        return Retrofit.Builder()
+            .baseUrl("https://thumbnail.laftel.net")
+            .addConverterFactory(GsonConverterFactory.create())
+            .client(okHttpClient)
+            .build()
+    }
+
+    @Provides
+    @Singleton
+    @RetrofitModule.MainDomainRetrofit
+    fun provideAnimeApi(@RetrofitModule.MainDomainRetrofit retrofit: Retrofit): AnimeApi =
+        retrofit.create(AnimeApi::class.java)
+
+    @Provides
+    @Singleton
+    @RetrofitModule.SubDomainRetrofit
+    fun subProvideAnimeApi(@RetrofitModule.SubDomainRetrofit retrofit: Retrofit): ImageApi =
+        retrofit.create(ImageApi::class.java)
 
     @Provides
     @Singleton
