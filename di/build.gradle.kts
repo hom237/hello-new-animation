@@ -42,6 +42,7 @@ android {
 }
 
 dependencies {
+    implementation(project(":annotation"))
     implementation(project(":networking"))
     implementation(libs.hilt.android)
 

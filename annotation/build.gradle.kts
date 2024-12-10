@@ -5,7 +5,7 @@ plugins {
 }
 
 android {
-    namespace = "com.daily.new_amime.for_my.networking"
+    namespace = "com.daily.new_amime.for_my.annotation"
     compileSdk = 34
 
     defaultConfig {
@@ -24,23 +24,16 @@ android {
             )
         }
     }
-    packaging {
-        resources {
-            excludes += "META-INF/gradle/incremental.annotation.processors"
-        }
-    }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
     }
-
     kotlinOptions {
         jvmTarget = "17"
     }
 }
 
 dependencies {
-    implementation(project(":annotation"))
 
     implementation(libs.gson)
     implementation(libs.converter.gson)
@@ -49,10 +42,11 @@ dependencies {
     implementation(libs.hilt.compiler)
     implementation(libs.hilt.android)
 
-    implementation(libs.androidx.appcompat)
-    implementation(libs.material)
+
 
     implementation(libs.androidx.core.ktx)
+    implementation(libs.androidx.appcompat)
+    implementation(libs.material)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
