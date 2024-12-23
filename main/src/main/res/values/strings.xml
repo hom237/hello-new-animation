@@ -1,4 +1,8 @@
 <resources>
     <string name="title_activity_main">MainActivity</string>
     <string name="widget_description">오늘 신작 보기</string>
+    <string name="widget_description_xml">오늘 신작 보기 xml</string>
+    <string name="appwidget_text">EXAMPLE</string>
+    <string name="add_widget">Add widget</string>
+    <string name="app_widget_description">This is an app widget description</string>
 </resources>

@@ -1,4 +1,4 @@
-package com.daily.new_amime.for_my.main.ui.wiget
+package com.daily.new_amime.for_my.main.ui.wiget.compose
 
 import android.content.Context
 import android.util.Log
@@ -25,7 +25,6 @@ import androidx.glance.text.Text
 import coil.compose.AsyncImage
 import com.daily.new_amime.for_my.networking.daily_anime.DailyDto
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.runBlocking
 
 

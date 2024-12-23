@@ -30,6 +30,7 @@ android {
     }
     buildFeatures {
         compose = true
+        viewBinding = true
     }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
@@ -42,6 +43,9 @@ android {
         resources {
             excludes += "META-INF/gradle/incremental.annotation.processors"
         }
+    }
+    buildFeatures{
+        viewBinding = true
     }
     kotlinOptions {
         jvmTarget = "17"

@@ -1,14 +1,16 @@
-package com.daily.new_amime.for_my.main.ui.wiget
+package com.daily.new_amime.for_my.main.ui.wiget.compose
 
 import android.appwidget.AppWidgetManager
 import android.content.Context
 import android.util.Log
+import androidx.compose.foundation.Image
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.glance.Button
 import androidx.glance.GlanceId
@@ -26,6 +28,7 @@ import androidx.glance.layout.fillMaxSize
 import androidx.glance.layout.padding
 import androidx.glance.text.Text
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
+import com.daily.new_amime.for_my.main.R
 import com.daily.new_amime.for_my.networking.anime.AnimeRepository
 import com.daily.new_amime.for_my.networking.daily_anime.DailyDto
 import com.daily.new_amime.for_my.networking.image.ImageRepository
@@ -36,7 +39,6 @@ import kotlinx.coroutines.runBlocking
 import java.io.File
 import javax.inject.Inject
 
-@Suppress("UNREACHABLE_CODE")
 @AndroidEntryPoint
 class NewAnimeWidgetReceiver : GlanceAppWidgetReceiver() {
     @Inject
@@ -44,6 +46,8 @@ class NewAnimeWidgetReceiver : GlanceAppWidgetReceiver() {
 
     @Inject
     lateinit var imageRepository: ImageRepository
+
+    val imageFileList = mutableListOf<File>()
 
     override val glanceAppWidget: GlanceAppWidget =
         NewInnerAnimeWidget()
@@ -61,6 +65,7 @@ class NewAnimeWidgetReceiver : GlanceAppWidgetReceiver() {
         var testImageFlow = MutableStateFlow<File>(File(""))
 
         override suspend fun provideGlance(context: Context, id: GlanceId) {
+
             getAnimeData()
             provideContent {
 
@@ -87,21 +92,19 @@ class NewAnimeWidgetReceiver : GlanceAppWidgetReceiver() {
             }
         }
 
-        private fun getAnimeImage(path: String) {
+        private fun getAnimeImage(url: String, file: File) {
             Log.d("test", "in fun")
             runBlocking {
+
                 kotlin.runCatching {
-                    val customPath = path.replace(
-                        "https://thumbnail.laftel.net/",
-                        ""
-                    )
-                    Log.d("test", "path : $customPath")
+                    Log.d("test", "path : $url")
                     imageRepository.getAnimationImage(
-                        path = customPath
-                    )
-                        .collect() {
-                            testImageFlow.emit(it)
-                        }
+                        url = url,
+                        file
+                    ).collect() {
+                        Log.d("test", "result : ${it.contentType()}")
+                    }
+
                 }.getOrElse { e ->
                     e.printStackTrace()
                     testImageFlow.emit(File(""))
@@ -117,10 +120,20 @@ class NewAnimeWidgetReceiver : GlanceAppWidgetReceiver() {
         @Composable
         private fun MyContent() {
             val test by testFlow.collectAsState(emptyList())
+            val context = LocalContext.current
 
             LaunchedEffect(test) {
                 if (test.isNotEmpty()) {
-                    getAnimeImage(test[0].img)
+                    test.forEachIndexed() { position, animeData ->
+                        imageFileList.add(
+                            File(
+                                context.cacheDir,
+                                "${animeData.name.replace(" ", "_")}.jpg"
+                            )
+                        )
+                        getAnimeImage(animeData.img, imageFileList[position])
+                        Log.d("pos", "index : $position")
+                    }
                 }
             }
 
@@ -135,8 +148,6 @@ class NewAnimeWidgetReceiver : GlanceAppWidgetReceiver() {
                 verticalAlignment = Alignment.Vertical.CenterVertically
             ) {
 
-
-                val context = LocalContext.current
 //            val imageBitmap = produceState<Bitmap?>(initialValue = null) {
 //                value = downloadImage(
 //                    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSJqKFIq8SX_H7NZTEwC5SA-JnSxBD87FLziA&s"
@@ -166,7 +177,18 @@ class NewAnimeWidgetReceiver : GlanceAppWidgetReceiver() {
 //                    },
 //                    contentDescription = "",
 //                )
-
+                Image(
+                    painterResource(R.drawable.profile) ,contentDescription = "",
+                )
+//                if (imageFileList.isNotEmpty()) {
+//                    Image(
+//
+//                        bitmap = BitmapFactory.decodeFile(imageFileList[0].absolutePath)
+//                            .asImageBitmap(),
+//                        contentDescription = "",
+//                    )
+//
+//                }
                 Text(
                     text = "${test.size} : ${cont.intValue}",
                     modifier = GlanceModifier.padding(12.dp)
@@ -175,13 +197,13 @@ class NewAnimeWidgetReceiver : GlanceAppWidgetReceiver() {
                     Button(
                         text = "+",
                         onClick = {
-                            cont.value = ++cont.value
+                            cont.intValue = ++cont.intValue
                         }
                     )
                     Button(
                         text = "-",
                         onClick = {
-                            cont.value = --cont.value
+                            cont.intValue = --cont.intValue
                         }
                     )
                 }

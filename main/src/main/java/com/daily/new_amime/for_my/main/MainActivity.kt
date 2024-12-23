@@ -18,10 +18,18 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.daily.new_amime.for_my.main.ui.theme.Daily_anime_appTheme
 import com.daily.new_amime.for_my.main.viewModel.AnimeViewModel
 import com.daily.new_amime.for_my.main.viewModel.DailyAnimeUiState
+import com.daily.new_amime.for_my.networking.anime.AnimeRepository
+import com.daily.new_amime.for_my.networking.image.ImageRepository
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+    @Inject
+    lateinit var animeRepository: AnimeRepository
+
+    @Inject
+    lateinit var imageRepository: ImageRepository
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
