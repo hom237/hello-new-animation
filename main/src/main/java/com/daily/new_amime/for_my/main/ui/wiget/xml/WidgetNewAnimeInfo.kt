@@ -8,7 +8,6 @@ import android.content.Intent
 import android.graphics.BitmapFactory
 import android.util.Log
 import android.widget.RemoteViews
-import androidx.lifecycle.asLiveData
 import com.daily.new_amime.for_my.main.R
 import com.daily.new_amime.for_my.networking.anime.AnimeRepository
 import com.daily.new_amime.for_my.networking.daily_anime.DailyDto
@@ -16,12 +15,12 @@ import com.daily.new_amime.for_my.networking.image.ImageRepository
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.runBlocking
 import java.io.File
+import java.util.Calendar
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -37,8 +36,9 @@ class WidgetNewAnimeInfo : AppWidgetProvider() {
 
     companion object {
         var page = 0
+        val date = listOf("일요일", "월요일", "화요일", "수요일", "목요일", "금요일", "토요일")
         var animeList :List<DailyDto> = emptyList<DailyDto>()
-        var today = "월요일"
+        var today = date[0]
         val imageFileList = mutableMapOf<String, File>()
     }
 
@@ -48,6 +48,10 @@ class WidgetNewAnimeInfo : AppWidgetProvider() {
         appWidgetIds: IntArray,
     ) {
         Log.d("WidgetLifeCycle", "onUpdate")
+        val calendar: Calendar = Calendar.getInstance()
+        var todayOfWeek: Int = calendar.get(Calendar.DAY_OF_WEEK)
+        today = date[todayOfWeek-1]
+        deleteFile(context)
         getAnimeData(context = context)
         testFlow.onEach {
             for (appWidgetId in appWidgetIds) {
@@ -60,6 +64,12 @@ class WidgetNewAnimeInfo : AppWidgetProvider() {
 //            }
 //        }.launchIn(GlobalScope)
         // There may be multiple widgets active, so update all of them
+    }
+
+    private fun deleteFile(context: Context) {
+        context.cacheDir.listFiles()?.forEach {
+            it.delete()
+        }
     }
 
     override fun onEnabled(context: Context) {
@@ -87,20 +97,24 @@ class WidgetNewAnimeInfo : AppWidgetProvider() {
                     .collect() {
 
                         animeList = it.filter { it.distributed_air_time ==  today}
-
+                        Log.d("test", "page : ${animeList.size}")
 
                         animeList.forEachIndexed() { position, animeData ->
-                            val name = animeData.name
+                            var name = animeData.name
+//                            if (name.contains("/")){
+//                                Log.d("test", "in if")
+//                                name = name.replace("/", "_")
+//                                Log.d("test", "name : $name")
+//                            }
+                            Log.d("test", "name : $name")
                             imageFileList[name]= File(
                                     context.cacheDir,
-                                    "${animeData.name.replace(" ", "_")}.jpg"
+                                    "${name.replace(" ", "_")}.jpg"
                                 )
 
                             imageFileList[name]?.let { it1 -> getAnimeImage(animeData.img, it1) }
-                            Log.d("pos", "index : $position")
                         }
 
-                        Log.d("test", "in fun 2-1")
                         testFlow.emit(it)
                     }
             }.getOrElse { e ->
@@ -117,6 +131,7 @@ class WidgetNewAnimeInfo : AppWidgetProvider() {
     override fun onReceive(context: Context?, intent: Intent?) {
         super.onReceive(context, intent)
         val widgetAction = intent?.action
+        Log.d("test", "day : $today")
         if (context != null) {
             val imageList = context.cacheDir.listFiles()
             when (widgetAction) {
@@ -203,7 +218,6 @@ class WidgetNewAnimeInfo : AppWidgetProvider() {
     private fun getAnimeImage(url: String, file: File) {
         Log.d("test", "in fun")
         runBlocking {
-
             kotlin.runCatching {
                 Log.d("test", "path : $url")
                 imageRepository.getAnimationImage(

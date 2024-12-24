@@ -21,6 +21,7 @@ class ImageRepositoryImpl @Inject constructor(
         val response: Response<ResponseBody> = subAnimeApi.getAnimationImage(url).execute()
         if (response.isSuccessful && response.body() != null) {
             Log.d("test", "body : ${response.body()}")
+            Log.d("test", "body : ${file.name}")
             if (response.body() != null) {
                 saveImage(response.body()!!, file)
             }
