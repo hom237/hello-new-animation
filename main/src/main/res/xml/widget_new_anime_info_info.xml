@@ -7,5 +7,5 @@
     android:minHeight="40dp"
     android:previewImage="@drawable/profile"
     android:resizeMode="horizontal|vertical"
-    android:updatePeriodMillis="0"
+    android:updatePeriodMillis="60000"
     android:widgetCategory="home_screen" />
