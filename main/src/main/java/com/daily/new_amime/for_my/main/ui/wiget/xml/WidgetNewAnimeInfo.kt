@@ -204,6 +204,10 @@ class WidgetNewAnimeInfo : AppWidgetProvider() {
                 setOnClickPendingIntent(R.id.nextButton, nextPendingIntent)
                 setOnClickPendingIntent(R.id.beforeButton, beforePendingIntent)
 
+                Log.d("path", "path : ${imageList.get(page)?.name}")
+
+                Log.d("path", "path : ${imageList.get(page)?.absolutePath}")
+
                     if (imageList != null && imageList.isNotEmpty()) {
                         setImageViewBitmap(
                             R.id.animeImage,
