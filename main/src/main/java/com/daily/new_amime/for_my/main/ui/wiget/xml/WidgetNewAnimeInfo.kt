@@ -101,11 +101,11 @@ class WidgetNewAnimeInfo : AppWidgetProvider() {
 
                         animeList.forEachIndexed() { position, animeData ->
                             var name = animeData.name
-//                            if (name.contains("/")){
-//                                Log.d("test", "in if")
-//                                name = name.replace("/", "_")
-//                                Log.d("test", "name : $name")
-//                            }
+                            if (name.contains("/")){
+                                Log.d("test", "in if")
+                                name = name.replace("/", "_")
+                                Log.d("test", "name : $name")
+                            }
                             Log.d("test", "name : $name")
                             imageFileList[name]= File(
                                     context.cacheDir,
