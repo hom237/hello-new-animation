@@ -92,15 +92,24 @@ class WidgetNewAnimeInfo : AppWidgetProvider() {
     override fun onReceive(context: Context?, intent: Intent?) {
         super.onReceive(context, intent)
         val widgetAction = intent?.action
-        Log.d("WidgetLifeCycle", "onReceive action: $widgetAction")
         if (context != null) {
+            val imageList = context.cacheDir.listFiles()
+            Log.d("page", "page : $page")
+            if (imageList != null) {
+                Log.d("page", "size : ${imageList.size}")
+            }
             when (widgetAction) {
                 "com.example.ACTION_NEXT_BUTTON" -> {
-                    ++page
+                    if ((imageList.size-1) > page) {
+                        ++page
+                    }
                 }
 
                 "com.example.ACTION_BEFORE_BUTTON" -> {
-                    if (page > 0) --page
+
+                    if (page > 0) {
+                        --page
+                    }
                 }
             }
             Log.d("xml", "title : ${context.cacheDir.list()?.get(page)}")
@@ -108,7 +117,6 @@ class WidgetNewAnimeInfo : AppWidgetProvider() {
             val appWidgetManager = AppWidgetManager.getInstance(context)
             if (intent != null) {
                 val appWidgetId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, 0)
-                Log.d("code", "id : ${appWidgetId}")
                 updateAppWidget(
                     context,
                     appWidgetManager,
@@ -153,7 +161,7 @@ class WidgetNewAnimeInfo : AppWidgetProvider() {
         }
 
         val beforeIntent = Intent(context, WidgetNewAnimeInfo::class.java).apply {
-            action = "com.example.BEFORE_BUTTON_CLICK"
+            action = "com.example.ACTION_BEFORE_BUTTON"
             putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
         }
         val beforePendingIntent = PendingIntent.getBroadcast(
@@ -171,7 +179,6 @@ class WidgetNewAnimeInfo : AppWidgetProvider() {
         val test = testFlow.asLiveData()
 
         val widgetText = context.getString(R.string.appwidget_text)
-        Log.d("test", "id : $appWidgetId")
 
         val views = RemoteViews(context.packageName, R.layout.widget_new_anime_info)
             .apply {
@@ -194,10 +201,6 @@ class WidgetNewAnimeInfo : AppWidgetProvider() {
                 setImageViewBitmap(
                     R.id.animeImage,
                     BitmapFactory.decodeFile(context.cacheDir.listFiles()?.get(page)?.absolutePath)
-                )
-                setImageViewBitmap(
-                    R.id.animeImage,
-                    BitmapFactory.decodeFile(context.cacheDir.listFiles()?.get(page+2)?.absolutePath)
                 )
 //              setImageViewUri(R.id.animeImage, Uri.parse("https://blog.kakaocdn.net/dn/byU2np/btqBQ1PPp3j/H4CQv7CftyO3rlI5kgmIVk/img.jpg"))
             }
