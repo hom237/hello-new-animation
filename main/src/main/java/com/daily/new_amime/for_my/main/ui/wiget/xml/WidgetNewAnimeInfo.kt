@@ -9,6 +9,7 @@ import android.graphics.BitmapFactory
 import android.util.Log
 import android.widget.RemoteViews
 import com.daily.new_amime.for_my.main.R
+import com.daily.new_amime.for_my.main.unit.WidgetRegex
 import com.daily.new_amime.for_my.networking.anime.AnimeRepository
 import com.daily.new_amime.for_my.networking.daily_anime.DailyDto
 import com.daily.new_amime.for_my.networking.image.ImageRepository
@@ -49,7 +50,8 @@ class WidgetNewAnimeInfo : AppWidgetProvider() {
     ) {
         Log.d("WidgetLifeCycle", "onUpdate")
         val calendar: Calendar = Calendar.getInstance()
-        var todayOfWeek: Int = calendar.get(Calendar.DAY_OF_WEEK)
+        val todayOfWeek: Int = calendar.get(Calendar.DAY_OF_WEEK)
+        page = 0
         today = date[todayOfWeek-1]
         deleteFile(context)
         getAnimeData(context = context)
@@ -101,6 +103,7 @@ class WidgetNewAnimeInfo : AppWidgetProvider() {
 
                         animeList.forEachIndexed() { position, animeData ->
                             var name = animeData.name
+                            Log.d("test", "unEncode : $name")
                             if (name.contains("/")){
                                 Log.d("test", "in if")
                                 name = name.replace("/", "_")
@@ -133,7 +136,7 @@ class WidgetNewAnimeInfo : AppWidgetProvider() {
         val widgetAction = intent?.action
         Log.d("test", "day : $today")
         if (context != null) {
-            val imageList = context.cacheDir.listFiles()
+            val imageList = context.cacheDir.listFiles()?.filter { it.name.contains(WidgetRegex.isJpg.toRegex()) }?: emptyList()
             when (widgetAction) {
                 "com.example.ACTION_NEXT_BUTTON" -> {
                     if ((imageList.size-1) > page) {
@@ -188,12 +191,8 @@ class WidgetNewAnimeInfo : AppWidgetProvider() {
             nextIntent,
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
-        val test = testFlow.value
-        Log.d("test", "test : ${test}")
-        Log.d("test", "test : ${animeList}")
 
-        val widgetText = context.getString(R.string.appwidget_text)
-        val imageList = context.cacheDir.listFiles()
+        val imageList = context.cacheDir.listFiles().filter { it.name.contains(WidgetRegex.isJpg.toRegex()) }
 
         val views = RemoteViews(context.packageName, R.layout.widget_new_anime_info)
             .apply {
@@ -204,11 +203,11 @@ class WidgetNewAnimeInfo : AppWidgetProvider() {
                 setOnClickPendingIntent(R.id.nextButton, nextPendingIntent)
                 setOnClickPendingIntent(R.id.beforeButton, beforePendingIntent)
 
-                Log.d("path", "path : ${imageList.get(page)?.name}")
-
-                Log.d("path", "path : ${imageList.get(page)?.absolutePath}")
-
-                    if (imageList != null && imageList.isNotEmpty()) {
+                    if (imageList.isNotEmpty()) {
+                        imageList.forEach{
+                            Log.d("path", "name : ${it?.name}")
+                        }
+                        Log.d("path", "path : ${imageList.get(page)?.absolutePath}")
                         setImageViewBitmap(
                             R.id.animeImage,
                             BitmapFactory.decodeFile(imageList.get(page)?.absolutePath)
