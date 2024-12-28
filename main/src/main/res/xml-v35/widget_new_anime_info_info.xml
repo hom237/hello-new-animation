@@ -1,16 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
-    android:description="@string/widget_description_xml"
+    android:description="@string/widget_description"
     android:initialKeyguardLayout="@layout/widget_new_anime_info"
     android:initialLayout="@layout/widget_new_anime_info"
-    android:minResizeWidth="276dp"
-    android:maxResizeWidth="276dp"
-    android:minWidth="276dp"
-    android:minHeight="338dp"
-    android:minResizeHeight="338dp"
-    android:maxResizeHeight="338dp"
+    android:targetCellWidth="4"
+    android:targetCellHeight="3"
     android:previewImage="@drawable/profile"
     android:resizeMode="horizontal|vertical"
     android:updatePeriodMillis="60000"
     android:widgetCategory="home_screen"
     />
+<!--
+android:minResizeWidth="349dp"
+    android:maxResizeWidth="349dp"
+    android:minWidth="349dp"
+    android:minHeight="337dp"
+    android:minResizeHeight="337dp"
+    android:maxResizeHeight="337dp"
+-->

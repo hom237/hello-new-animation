@@ -1,6 +1,7 @@
 <resources>
     <string name="title_activity_main">오타쿠</string>
     <string name="widget_description">오늘 신작 보기</string>
+    <string name="widget_description_new">오늘 신작 보기 new</string>
     <string name="widget_description_xml">오늘 신작 보기 xml</string>
     <string name="appwidget_text">EXAMPLE</string>
     <string name="add_widget">Add widget</string>
