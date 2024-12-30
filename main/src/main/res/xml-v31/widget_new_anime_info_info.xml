@@ -9,6 +9,12 @@
     android:resizeMode="horizontal|vertical"
     android:updatePeriodMillis="60000"
     android:widgetCategory="home_screen"
-    android:minResizeHeight="110dp"
-    android:minResizeWidth=""
     />
+<!--
+android:minResizeWidth="349dp"
+    android:maxResizeWidth="349dp"
+    android:minWidth="349dp"
+    android:minHeight="337dp"
+    android:minResizeHeight="337dp"
+    android:maxResizeHeight="337dp"
+-->

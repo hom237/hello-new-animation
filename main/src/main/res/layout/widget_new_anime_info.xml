@@ -42,7 +42,7 @@
                     android:textSize="16sp"
                     android:text="asaaf"
                     />
-                <View
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:background="@color/black"
@@ -54,6 +54,7 @@
                     android:textSize="14sp"
                     android:layout_marginTop="8dp"
                     android:text="콘텐츠 등급"
+                    android:textStyle="bold"
                     />
                 <TextView
                     android:id="@+id/ratingOfAnime"
@@ -69,7 +70,8 @@
                     android:textColor="@color/black"
                     android:textSize="14sp"
                     android:layout_marginTop="5dp"
-                    android:text="콘텐츠 등급"
+                    android:text="마지막 갱신일"
+                    android:textStyle="bold"
                     />
                 <TextView
                     android:id="@+id/updateOfDay"
