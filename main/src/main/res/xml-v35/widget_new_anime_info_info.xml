@@ -4,7 +4,7 @@
     android:initialKeyguardLayout="@layout/widget_new_anime_info"
     android:initialLayout="@layout/widget_new_anime_info"
     android:targetCellWidth="4"
-    android:targetCellHeight="3"
+    android:targetCellHeight="2"
     android:previewImage="@drawable/profile"
     android:resizeMode="horizontal|vertical"
     android:updatePeriodMillis="60000"

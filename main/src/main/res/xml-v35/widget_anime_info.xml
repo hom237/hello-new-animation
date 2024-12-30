@@ -3,7 +3,7 @@
     android:previewImage="@drawable/profile"
     android:description="@string/widget_description_new"
     android:targetCellWidth="4"
-    android:targetCellHeight="3"
+    android:targetCellHeight="2"
     android:resizeMode="horizontal|vertical"
     android:updatePeriodMillis="3600000"
     android:widgetCategory="home_screen" />
