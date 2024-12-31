@@ -11,7 +11,7 @@
 
             <meta-data
                 android:name="android.appwidget.provider"
-                android:resource="@xml/widget_new_anime_info_info" />
+                android:resource="@xml/widget_new_anime_horizon" />
         </receiver>
 
         <activity
