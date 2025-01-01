@@ -262,13 +262,19 @@ class WidgetAnimeInfoVertical : AppWidgetProvider() {
         val smallViews = RemoteViews(context.packageName, smallView)
             .apply {
                 if (animeList.isNotEmpty()) {
-                    val animeData = animeList[page]
-                    Log.d("test", "anime : $animeData")
-                    setTextViewText(R.id.animeName, animeData.name)
+                    if  (animeList.size > page) {
+                        val animeData = animeList[page]
+                        Log.d("test", "anime : $animeData")
+                        setTextViewText(R.id.animeName, animeData.name)
+                    }else{
+                        setTextViewText(R.id.animeName, "값 없음")
+                    }
                 }
+
                 setOnClickPendingIntent(R.id.nextButton, nextPendingIntent)
                 setOnClickPendingIntent(R.id.beforeButton, beforePendingIntent)
             }
+
         val viewMapping: Map<SizeF, RemoteViews> = mapOf(
             SizeF(349f, 102f) to smallViews,
             SizeF(349f, 220f) to largeViews

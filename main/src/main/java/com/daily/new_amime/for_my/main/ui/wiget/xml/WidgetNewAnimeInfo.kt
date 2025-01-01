@@ -23,6 +23,7 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.runBlocking
 import java.io.File
+import java.time.LocalDate
 import java.util.Calendar
 import javax.inject.Inject
 
@@ -40,7 +41,7 @@ class WidgetNewAnimeInfo : AppWidgetProvider() {
     companion object {
         var page = 0
         val date = listOf("일요일", "월요일", "화요일", "수요일", "목요일", "금요일", "토요일")
-        var animeList :List<DailyDto> = emptyList<DailyDto>()
+        var animeList: List<DailyDto> = emptyList<DailyDto>()
         var today = date[0]
         val imageFileList = mutableMapOf<String, File>()
         val smallView = R.layout.widget_new_anime_horizon_small
@@ -52,46 +53,42 @@ class WidgetNewAnimeInfo : AppWidgetProvider() {
         context: Context?,
         appWidgetManager: AppWidgetManager?,
         appWidgetId: Int,
-        newOptions: Bundle?
+        newOptions: Bundle?,
     ) {
         super.onAppWidgetOptionsChanged(context, appWidgetManager, appWidgetId, newOptions)
-        // Get the new sizes.
         val sizes = newOptions?.getParcelableArrayList<SizeF>(
             AppWidgetManager.OPTION_APPWIDGET_SIZES
         )
-        Log.d("test", "size : ${sizes}")
-        // Check that the list of sizes is provided by the launcher.
         if (sizes.isNullOrEmpty()) {
             return
         }
         val largeViews = RemoteViews(context?.packageName, largeView)
             .apply {
-//              setImageViewUri(R.id.animeImage, context.cacheDir.absolutePath.toUri())
                 if (animeList.isNotEmpty()) {
                     val animeData = animeList[page]
-                    Log.d("test", "anime : $animeData")
-                    setTextViewText(R.id.animeName, animeData.name)
+                    setTextViewText(R.id.animeName, today)
+                    setTextViewText(R.id.ratingOfAnime, animeData.content_rating)
                     setTextViewText(R.id.ratingOfAnime, animeData.content_rating)
                 }
-//              setImageViewUri(R.id.animeImage, Uri.parse("https://blog.kakaocdn.net/dn/byU2np/btqBQ1PPp3j/H4CQv7CftyO3rlI5kgmIVk/img.jpg"))
             }
 
         val smallViews = RemoteViews(context?.packageName, smallView)
             .apply {
                 if (animeList.isNotEmpty()) {
                     val animeData = animeList[page]
-                    Log.d("test", "anime : $animeData")
                     setTextViewText(R.id.animeName, animeData.name)
+                    setTextViewText(
+                        R.id.updateOfDay,
+                        getAnimeUpdateData(animeData.latest_episode_created?.substring(0, 10))
+                    )
                 }
             }
         val viewMapping: Map<SizeF, RemoteViews> = mapOf(
-            SizeF(455f, 110f) to smallViews,
-            SizeF(57f, 337f) to largeViews
+            SizeF(455f, 110f) to largeViews,
+            SizeF(57f, 337f) to smallViews
         )
 
-        // Map the sizes to the RemoteViews that you want.
-//        val remoteViews = RemoteViews(sizes.associateWith(::createRemoteViews))
-        appWidgetManager?.updateAppWidget(appWidgetId,smallViews)
+        appWidgetManager?.updateAppWidget(appWidgetId, RemoteViews(viewMapping))
     }
 
 
@@ -100,10 +97,9 @@ class WidgetNewAnimeInfo : AppWidgetProvider() {
         appWidgetManager: AppWidgetManager,
         appWidgetIds: IntArray,
     ) {
-        Log.d("WidgetLifeCycle", "onUpdate")
         val calendar: Calendar = Calendar.getInstance()
         val todayOfWeek: Int = calendar.get(Calendar.DAY_OF_WEEK)
-        today = date[todayOfWeek-1]
+        today = date[todayOfWeek - 1]
         deleteFile(context)
         getAnimeData(context = context)
         testFlow.onEach {
@@ -120,44 +116,37 @@ class WidgetNewAnimeInfo : AppWidgetProvider() {
     }
 
     override fun onEnabled(context: Context) {
-        // Enter relevant functionality for when the first widget is created
         super.onEnabled(context)
-        Log.d("WidgetLifeCycle", "onEnabled")
     }
 
     override fun onRestored(context: Context?, oldWidgetIds: IntArray?, newWidgetIds: IntArray?) {
         super.onRestored(context, oldWidgetIds, newWidgetIds)
-        Log.d("WidgetLifeCycle", "onEnabled")
     }
 
     override fun onDisabled(context: Context) {
         super.onDisabled(context)
-        Log.d("WidgetLifeCycle", "onDisabled")
-        // Enter relevant functionality for when the last widget is disabled
     }
 
-    private fun getAnimeData(context : Context) {
-        Log.d("test", "in fun 1")
+    private fun getAnimeData(context: Context) {
         runBlocking {
             kotlin.runCatching {
                 animeRepository.getAnimationDaily()
                     .collect() {
-                        animeList = it.filter { it.distributed_air_time ==  today}
+                        animeList = it.filter { it.distributed_air_time == today }
                         Log.d("test", "page : ${animeList.size}")
+                        animeList.forEach {
+                            Log.d("test", "name : ${it.name}")
+                        }
 
                         animeList.forEachIndexed() { position, animeData ->
                             var name = animeData.name
-                            Log.d("test", "unEncode : $name")
-                            if (name.contains("/")){
-                                Log.d("test", "in if")
+                            if (name.contains("/")) {
                                 name = name.replace("/", "_")
-                                Log.d("test", "name : $name")
                             }
-                            Log.d("test", "name : $name")
-                            imageFileList[name]= File(
-                                    context.cacheDir,
-                                    "${name.replace(" ", "_")}.jpg"
-                                )
+                            imageFileList[name] = File(
+                                context.cacheDir,
+                                "${name.replace(" ", "_")}.jpg"
+                            )
 
                             imageFileList[name]?.let { it1 -> getAnimeImage(animeData.img, it1) }
                         }
@@ -168,7 +157,6 @@ class WidgetNewAnimeInfo : AppWidgetProvider() {
                 testFlow.emit(emptyList())
                 flow<List<DailyDto>> {
                     animeList = emptyList()
-                    Log.d("test", "in fun 2-2")
                     emit(emptyList())
                 }
             }
@@ -178,17 +166,16 @@ class WidgetNewAnimeInfo : AppWidgetProvider() {
     override fun onReceive(context: Context?, intent: Intent?) {
         super.onReceive(context, intent)
         val widgetAction = intent?.action
-        Log.d("test", "day : $today")
         if (context != null) {
-            val imageList = context.cacheDir.listFiles()?.filter { it.name.contains(WidgetRegex.isJpg.toRegex()) }?: emptyList()
+            val imageList = context.cacheDir.listFiles()
+                ?.filter { it.name.contains(WidgetRegex.isJpg.toRegex()) } ?: emptyList()
             when (widgetAction) {
                 "com.example.ACTION_NEXT_BUTTON" -> {
-                    if ((imageList.size-1) > page) {
+                    if ((imageList.size - 1) > page) {
                         ++page
                     }
                 }
                 "com.example.ACTION_BEFORE_BUTTON" -> {
-
                     if (page > 0) {
                         --page
                     }
@@ -212,8 +199,6 @@ class WidgetNewAnimeInfo : AppWidgetProvider() {
         appWidgetManager: AppWidgetManager,
         appWidgetId: Int,
     ) {
-
-        Log.d("WidgetLifeCycle", "updateAppWidget")
         val nextIntent = Intent(context, WidgetNewAnimeInfo::class.java).apply {
             action = "com.example.ACTION_NEXT_BUTTON"
             putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
@@ -236,35 +221,41 @@ class WidgetNewAnimeInfo : AppWidgetProvider() {
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
 
-        val imageList = context.cacheDir.listFiles().filter { it.name.contains(WidgetRegex.isJpg.toRegex()) }
+        val imageList =
+            context.cacheDir.listFiles().filter { it.name.contains(WidgetRegex.isJpg.toRegex()) }
 
         val largeViews = RemoteViews(context.packageName, largeView)
             .apply {
-//              setImageViewUri(R.id.animeImage, context.cacheDir.absolutePath.toUri())
                 if (animeList.isNotEmpty()) {
                     val animeData = animeList[page]
-                    Log.d("test", "anime : $animeData")
                     setTextViewText(R.id.animeName, animeData.name)
+                    setTextViewText(R.id.dayOfAnime, today)
                     setTextViewText(R.id.ratingOfAnime, animeData.content_rating)
+                    setTextViewText(
+                        R.id.updateOfDay,
+                        getAnimeUpdateData(animeData.latest_episode_created?.substring(0, 10))
+                    )
                 }
                 setOnClickPendingIntent(R.id.nextButton, nextPendingIntent)
                 setOnClickPendingIntent(R.id.beforeButton, beforePendingIntent)
 
-                    if (imageList.isNotEmpty()) {
-                        setImageViewBitmap(
-                            R.id.animeImage,
-                            BitmapFactory.decodeFile(imageList.get(page)?.absolutePath)
-                        )
-                    }
-//              setImageViewUri(R.id.animeImage, Uri.parse("https://blog.kakaocdn.net/dn/byU2np/btqBQ1PPp3j/H4CQv7CftyO3rlI5kgmIVk/img.jpg"))
+                if (imageList.isNotEmpty()) {
+                    setImageViewBitmap(
+                        R.id.animeImage,
+                        BitmapFactory.decodeFile(imageList.get(page)?.absolutePath)
+                    )
+                }
             }
 
         val smallViews = RemoteViews(context.packageName, smallView)
             .apply {
                 if (animeList.isNotEmpty()) {
                     val animeData = animeList[page]
-                    Log.d("test", "anime : $animeData")
                     setTextViewText(R.id.animeName, animeData.name)
+                    setTextViewText(
+                        R.id.updateOfDay,
+                        getAnimeUpdateData(animeData.latest_episode_created?.substring(0, 10))
+                    )
                 }
                 setOnClickPendingIntent(R.id.nextButton, nextPendingIntent)
                 setOnClickPendingIntent(R.id.beforeButton, beforePendingIntent)
@@ -276,11 +267,19 @@ class WidgetNewAnimeInfo : AppWidgetProvider() {
         appWidgetManager.updateAppWidget(appWidgetId, RemoteViews(viewMapping))
     }
 
+    private fun getAnimeUpdateData(date: String?): String {
+        val result = ""
+        if (date.isNullOrEmpty()) {
+            return result + "공개 예정"
+        } else {
+            val latestDate = LocalDate.parse(date.substring(0, 10))
+            return "${latestDate.year}년 ${latestDate.monthValue}월 ${latestDate.dayOfMonth}일"
+        }
+    }
+
     private fun getAnimeImage(url: String, file: File) {
-        Log.d("test", "in fun")
         runBlocking {
             kotlin.runCatching {
-                Log.d("test", "path : $url")
                 imageRepository.getAnimationImage(
                     url = url,
                     file
