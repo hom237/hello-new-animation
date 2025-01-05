@@ -229,7 +229,7 @@ class WidgetNewAnimeInfo : AppWidgetProvider() {
                 if (animeList.isNotEmpty()) {
                     val animeData = animeList[page]
                     setTextViewText(R.id.animeName, animeData.name)
-                    setTextViewText(R.id.dayOfAnime, today)
+                    setTextViewText(R.id.dayOfAnime, "${today.substring(0, 2)}애니")
                     setTextViewText(R.id.ratingOfAnime, animeData.content_rating)
                     setTextViewText(
                         R.id.updateOfDay,
