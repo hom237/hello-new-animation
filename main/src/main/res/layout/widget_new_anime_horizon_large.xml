@@ -2,134 +2,151 @@
     style="@style/Widget.Daily_anime_app.AppWidget.Container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:theme="@style/Theme.Daily_anime_app.AppWidgetContainer"
-    android:background="@color/white">
+    android:background="@color/white"
+    android:theme="@style/Theme.Daily_anime_app.AppWidgetContainer">
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="220dp"
-        android:orientation="vertical"
-        >
+        android:orientation="vertical">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            >
-        <ImageView
-            android:id="@+id/animeImage"
-            style="@style/Widget.Daily_anime_app.AppWidget.InnerView"
-            android:layout_width="176dp"
-            android:layout_height="130dp"
-            android:layout_centerHorizontal="true"
-            android:layout_centerVertical="true"
-            android:layout_margin="8dp"
-            android:scaleType="center"
-            android:clipToOutline="true"
-            android:background="@drawable/round"
-            android:src="@drawable/profile"
-            />
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/animeImage"
+                style="@style/Widget.Daily_anime_app.AppWidget.InnerView"
+                android:layout_width="176dp"
+                android:layout_height="130dp"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:layout_margin="8dp"
+                android:background="@drawable/round"
+                android:clipToOutline="true"
+                android:scaleType="center"
+                android:src="@drawable/profile" />
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical"
-                android:paddingTop="16dp"
                 android:paddingHorizontal="8dp"
-                >
-                <TextView
-                    android:id="@+id/dayOfAnime"
+                android:paddingTop="16dp">
+
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/black"
-                    android:textSize="16sp"
-                    android:text="asaaf"
-                    />
+                    android:layout_gravity="center"
+                    >
+
+                    <TextView
+                        android:id="@+id/dayOfAnime"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:text=""
+                        android:textColor="@color/black"
+                        android:textSize="16sp"
+                        android:layout_weight="1"
+                        />
+                    <ImageButton
+                        android:id="@+id/refresh"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:padding="3dp"
+                        android:scaleType="centerCrop"
+                        android:tint="@color/gray"
+                        android:src="@drawable/ic_refresh"
+                        android:backgroundTint="@color/invisible"
+                        />
+                </LinearLayout>
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:background="@color/black"
-                    />
+                    android:background="@color/black" />
+
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/black"
-                    android:textSize="14sp"
                     android:layout_marginTop="8dp"
                     android:text="콘텐츠 등급"
-                    android:textStyle="bold"
-                    />
+                    android:textColor="@color/black"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+
                 <TextView
                     android:id="@+id/ratingOfAnime"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/black"
-                    android:textSize="14sp"
                     android:text="asaaf"
-                    />
+                    android:textColor="@color/black"
+                    android:textSize="14sp" />
+
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/black"
-                    android:textSize="14sp"
                     android:layout_marginTop="5dp"
                     android:text="마지막 갱신일"
-                    android:textStyle="bold"
-                    />
+                    android:textColor="@color/black"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+
                 <TextView
                     android:id="@+id/updateOfDay"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/black"
-                    android:textSize="14sp"
                     android:text="asaaf"
-                    />
+                    android:textColor="@color/black"
+                    android:textSize="14sp" />
 
             </LinearLayout>
         </LinearLayout>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="horizontal"
             android:layout_gravity="center"
             android:gravity="center"
-            >
+            android:orientation="horizontal">
+
             <ImageButton
                 android:id="@+id/beforeButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_arrow_back"
-                android:contextClickable="true"
-                android:background="@color/invisible"
                 android:layout_weight="1"
-                />
+                android:background="@color/invisible"
+                android:contextClickable="true"
+                android:src="@drawable/ic_arrow_back" />
 
             <TextView
+                android:id="@+id/animeName"
                 android:layout_width="284dp"
                 android:layout_height="wrap_content"
-                android:id="@+id/animeName"
-                android:text="A랭크_파티를_이탈한_나는,_전_제자들과_미궁_심부를_목표로_한다."
-                android:textColor="@color/black"
-                android:textSize="20sp"
-                android:layout_marginHorizontal="8dp"
-                android:textAlignment="center"
                 android:layout_gravity="center"
-                android:gravity="center"
+                android:layout_marginHorizontal="8dp"
                 android:layout_weight="2"
-                android:maxLines="1"
-                android:ellipsize="end"
                 android:autoSizeMaxTextSize="20sp"
                 android:autoSizeMinTextSize="11sp"
                 android:autoSizeTextType="uniform"
-                />
+                android:ellipsize="end"
+                android:gravity="center"
+                android:maxLines="1"
+                android:text="A랭크_파티를_이탈한_나는,_전_제자들과_미궁_심부를_목표로_한다."
+                android:textAlignment="center"
+                android:textColor="@color/black"
+                android:textSize="20sp" />
 
             <ImageButton
                 android:id="@+id/nextButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_arrow_next"
-                android:contextClickable="true"
-                android:clickable="true"
-                android:background="@color/invisible"
                 android:layout_weight="3"
-                />
+                android:background="@color/invisible"
+                android:clickable="true"
+                android:contextClickable="true"
+                android:src="@drawable/ic_arrow_next" />
 
         </LinearLayout>
 
