@@ -101,11 +101,7 @@ class WidgetAnimeInfoVertical : AppWidgetProvider() {
         appWidgetIds: IntArray,
     ) {
         Log.d("WidgetLifeCycle", "onUpdate")
-        val calendar: Calendar = Calendar.getInstance()
-        val todayOfWeek: Int = calendar.get(Calendar.DAY_OF_WEEK)
-        today = date[todayOfWeek-1]
-        deleteFile(context)
-        getAnimeData(context = context)
+        initWidget(context)
         testFlow.onEach {
             for (appWidgetId in appWidgetIds) {
                 updateAppWidget(context, appWidgetManager, appWidgetId)
@@ -193,6 +189,10 @@ class WidgetAnimeInfoVertical : AppWidgetProvider() {
                         --page
                     }
                 }
+                "com.example.ACTION_REFRESH" -> {
+                    Log.d("test", "in refresh")
+                    initWidget(context)
+                }
             }
             val appWidgetManager = AppWidgetManager.getInstance(context)
             if (intent != null) {
@@ -206,6 +206,13 @@ class WidgetAnimeInfoVertical : AppWidgetProvider() {
         }
     }
 
+    private fun initWidget(context: Context){
+        val calendar: Calendar = Calendar.getInstance()
+        val todayOfWeek: Int = calendar.get(Calendar.DAY_OF_WEEK)
+        today = date[todayOfWeek-1]
+        deleteFile(context)
+        getAnimeData(context = context)
+    }
 
     private fun updateAppWidget(
         context: Context,
@@ -216,6 +223,11 @@ class WidgetAnimeInfoVertical : AppWidgetProvider() {
         Log.d("WidgetLifeCycle", "updateAppWidget")
         val nextIntent = Intent(context, WidgetAnimeInfoVertical::class.java).apply {
             action = "com.example.ACTION_NEXT_BUTTON"
+            putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
+        }
+
+        val refreshIntent = Intent(context, WidgetAnimeInfoVertical::class.java).apply {
+            action = "com.example.ACTION_REFRESH"
             putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
         }
 
@@ -235,6 +247,12 @@ class WidgetAnimeInfoVertical : AppWidgetProvider() {
             nextIntent,
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
+        val refreshPendingIntent = PendingIntent.getBroadcast(
+            context,
+            0,
+            refreshIntent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
 
         val imageList = context.cacheDir.listFiles().filter { it.name.contains(WidgetRegex.isJpg.toRegex()) }
 
@@ -249,6 +267,7 @@ class WidgetAnimeInfoVertical : AppWidgetProvider() {
                 }
                 setOnClickPendingIntent(R.id.nextButton, nextPendingIntent)
                 setOnClickPendingIntent(R.id.beforeButton, beforePendingIntent)
+                setOnClickPendingIntent(R.id.refresh, refreshPendingIntent)
 
                     if (imageList.isNotEmpty()) {
                         setImageViewBitmap(
@@ -273,6 +292,7 @@ class WidgetAnimeInfoVertical : AppWidgetProvider() {
 
                 setOnClickPendingIntent(R.id.nextButton, nextPendingIntent)
                 setOnClickPendingIntent(R.id.beforeButton, beforePendingIntent)
+                setOnClickPendingIntent(R.id.refresh, refreshPendingIntent)
             }
 
         val viewMapping: Map<SizeF, RemoteViews> = mapOf(

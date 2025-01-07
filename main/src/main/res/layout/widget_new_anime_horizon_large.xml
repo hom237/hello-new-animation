@@ -58,7 +58,8 @@
                         android:scaleType="centerCrop"
                         android:tint="@color/gray"
                         android:src="@drawable/ic_refresh"
-                        android:backgroundTint="@color/invisible"
+                        android:background="@color/invisible"
+                        android:contextClickable="true"
                         />
                 </LinearLayout>
 
