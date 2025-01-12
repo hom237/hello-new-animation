@@ -11,7 +11,7 @@
     android:widgetCategory="home_screen"
     android:minResizeWidth="337dp"
     android:minResizeHeight="57dp"
-    android:maxResizeWidth="455dp"
+    android:maxResizeWidth="337dp"
     android:maxResizeHeight="110dp"
     />
 <!--

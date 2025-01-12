@@ -28,7 +28,7 @@ import java.util.Calendar
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class WidgetNewAnimeInfo : AppWidgetProvider() {
+class WidgetAnimeInfoHorizon : AppWidgetProvider() {
     var testFlow = MutableStateFlow(emptyList<DailyDto>())
     var testImageFlow = MutableStateFlow<File>(File(""))
 
@@ -199,12 +199,12 @@ class WidgetNewAnimeInfo : AppWidgetProvider() {
         appWidgetManager: AppWidgetManager,
         appWidgetId: Int,
     ) {
-        val nextIntent = Intent(context, WidgetNewAnimeInfo::class.java).apply {
+        val nextIntent = Intent(context, WidgetAnimeInfoHorizon::class.java).apply {
             action = "com.example.ACTION_NEXT_BUTTON"
             putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
         }
 
-        val beforeIntent = Intent(context, WidgetNewAnimeInfo::class.java).apply {
+        val beforeIntent = Intent(context, WidgetAnimeInfoHorizon::class.java).apply {
             action = "com.example.ACTION_BEFORE_BUTTON"
             putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
         }
