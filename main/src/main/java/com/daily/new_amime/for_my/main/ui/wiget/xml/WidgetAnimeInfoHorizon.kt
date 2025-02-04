@@ -171,14 +171,20 @@ class WidgetAnimeInfoHorizon : AppWidgetProvider() {
                 ?.filter { it.name.contains(WidgetRegex.isJpg.toRegex()) } ?: emptyList()
             when (widgetAction) {
                 "com.example.ACTION_NEXT_BUTTON" -> {
+                    Log.d("test", "clicked next button")
                     if ((imageList.size - 1) > page) {
                         ++page
                     }
                 }
                 "com.example.ACTION_BEFORE_BUTTON" -> {
+                    Log.d("test", "clicked before button")
                     if (page > 0) {
                         --page
                     }
+                }
+                "com.example.ACTION_REFRESH" -> {
+                    Log.d("test", "clicked refresh button")
+                    initWidget(context)
                 }
             }
             val appWidgetManager = AppWidgetManager.getInstance(context)
@@ -193,6 +199,13 @@ class WidgetAnimeInfoHorizon : AppWidgetProvider() {
         }
     }
 
+    private fun initWidget(context: Context){
+        val calendar: Calendar = Calendar.getInstance()
+        val todayOfWeek: Int = calendar.get(Calendar.DAY_OF_WEEK)
+        WidgetAnimeInfoVertical.today = WidgetAnimeInfoVertical.date[todayOfWeek-1]
+        deleteFile(context)
+        getAnimeData(context = context)
+    }
 
     private fun updateAppWidget(
         context: Context,
@@ -203,11 +216,15 @@ class WidgetAnimeInfoHorizon : AppWidgetProvider() {
             action = "com.example.ACTION_NEXT_BUTTON"
             putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
         }
-
         val beforeIntent = Intent(context, WidgetAnimeInfoHorizon::class.java).apply {
             action = "com.example.ACTION_BEFORE_BUTTON"
             putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
         }
+        val refreshIntent = Intent(context, WidgetAnimeInfoVertical::class.java).apply {
+            action = "com.example.ACTION_REFRESH"
+            putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
+        }
+
         val beforePendingIntent = PendingIntent.getBroadcast(
             context,
             1,
@@ -220,6 +237,13 @@ class WidgetAnimeInfoHorizon : AppWidgetProvider() {
             nextIntent,
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
+        val refreshPendingIntent = PendingIntent.getBroadcast(
+            context,
+            0,
+            refreshIntent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
+
 
         val imageList =
             context.cacheDir.listFiles().filter { it.name.contains(WidgetRegex.isJpg.toRegex()) }
@@ -238,6 +262,8 @@ class WidgetAnimeInfoHorizon : AppWidgetProvider() {
                 }
                 setOnClickPendingIntent(R.id.nextButton, nextPendingIntent)
                 setOnClickPendingIntent(R.id.beforeButton, beforePendingIntent)
+                setOnClickPendingIntent(R.id.refresh, refreshPendingIntent)
+
 
                 if (imageList.isNotEmpty()) {
                     setImageViewBitmap(

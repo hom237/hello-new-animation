@@ -179,18 +179,19 @@ class WidgetAnimeInfoVertical : AppWidgetProvider() {
             val imageList = context.cacheDir.listFiles()?.filter { it.name.contains(WidgetRegex.isJpg.toRegex()) }?: emptyList()
             when (widgetAction) {
                 "com.example.ACTION_NEXT_BUTTON" -> {
+                    Log.d("test", "clicked next button")
                     if ((imageList.size-1) > page) {
                         ++page
                     }
                 }
                 "com.example.ACTION_BEFORE_BUTTON" -> {
-
+                    Log.d("test", "clicked before button")
                     if (page > 0) {
                         --page
                     }
                 }
                 "com.example.ACTION_REFRESH" -> {
-                    Log.d("test", "in refresh")
+                    Log.d("test", "clicked refresh button")
                     initWidget(context)
                 }
             }
